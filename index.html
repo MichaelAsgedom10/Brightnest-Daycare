@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Brightnest Daycare — Bright Futures, Futuristic Feel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1724" />
+  <style>
+    :root{
+      --bg-1: #071029; /* deep navy */
+      --bg-2: #0b1020; /* midnight */
+      --accent: #ffd500; /* brand gold */
+      --neon: #7cf1ff; /* cyan glow */
+      --glass: rgba(255,255,255,0.06);
+      --glass-2: rgba(255,255,255,0.08);
+      --card-radius: 18px;
+      --max-width: 1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:Inter, Poppins, system-ui, -apple-system;min-height:100vh;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,75,162,0.12), transparent 8%),
+                 radial-gradient(1000px 500px at 90% 90%, rgba(102,126,234,0.08), transparent 8%),
+                 linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:#e6eef9; -webkit-font-smoothing:antialiased;
+      display:flex;flex-direction:column;align-items:center;
+    }
+    /* particle canvas sits behind content */
+    #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    header{
+      width:100%;z-index:5;position:relative;padding:26px 20px 32px;display:flex;align-items:center;justify-content:center;
+      backdrop-filter: blur(6px);
+    }
+    .nav-wrap{width:90%;max-width:var(--max-width);display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo-blob{width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#ffb84d);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,0.45);position:relative;overflow:hidden}
+    .logo-blob img{width:58px;height:auto;display:block}
+    .title{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:0.6px;text-shadow:0 4px 28px rgba(255,213,0,0.06)}
+    nav{display:flex;gap:12px;align-items:center}
+    .nav a{color:rgba(230,238,249,0.9);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600;font-size:14px}
+    .nav a:hover{background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));box-shadow:0 4px 18px rgba(0,0,0,0.45)}
+
+    main{width:90%;max-width:var(--max-width);margin-top:12px;z-index:3}
+    .hero{
+      display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-bottom:28px
+    }
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:var(--card-radius);padding:28px;box-shadow:0 20px 50px rgba(2,6,23,0.6);backdrop-filter: blur(8px);border:1px solid rgba(255,255,255,0.04)
+    }
+
+    .hero h1{font-size:36px;margin:0 0 12px 0;color:white;line-height:1.05}
+    .hero p{margin:0 0 18px 0;color:rgba(230,238,249,0.86);font-weight:500}
+    .cta-row{display:flex;gap:12px;align-items:center}
+    .btn{padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--accent),#ffbf36);color:#0c1220;font-weight:800;border:none;cursor:pointer;letter-spacing:0.6px}
+    .ghost{padding:10px 14px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:rgba(230,238,249,0.95);font-weight:700}
+
+    /* floating info panel */
+    .panel{position:relative;overflow:hidden}
+    .panel .image{width:100%;height:260px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 12px 40px rgba(0,0,0,0.45)}
+    .floating-badge{position:absolute;left:16px;bottom:16px;background:linear-gradient(90deg, rgba(124,75,162,0.9), rgba(102,126,234,0.9));padding:8px 12px;border-radius:10px;font-weight:700;box-shadow:0 8px 28px rgba(0,0,0,0.45)}
+
+    /* features grid */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:28px}
+    .feature{padding:20px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:8px}
+    .feature h3{margin:0;font-size:16px;color:var(--accent)}
+    .feature p{margin:0;color:rgba(230,238,249,0.84);font-weight:500}
+
+    /* programs & enroll */
+    .two-col{display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:start}
+    .programs ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+    .programs li{background:var(--glass);padding:14px;border-radius:10px;font-weight:600}
+
+    form.enroll{display:flex;flex-direction:column;gap:12px}
+    form.enroll input, form.enroll textarea{padding:12px;border-radius:10px;border:none;font-weight:600}
+    form.enroll button{padding:12px;border-radius:12px;border:none;font-weight:800;cursor:pointer}
+
+    footer{width:100%;padding:18px 0;margin-top:34px;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.08));display:flex;justify-content:center}
+    .footer-inner{width:90%;max-width:var(--max-width);display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .contact{font-weight:700}
+
+    /* neon animated underline */
+    .neon{position:relative}
+    .neon::after{content:'';position:absolute;left:0;bottom:-6px;height:4px;width:0;background:linear-gradient(90deg,var(--neon),transparent);box-shadow:0 0 18px var(--neon);border-radius:8px;transition:width 0.5s ease}
+    .neon:hover::after{width:100%}
+
+    /* subtle entrance animations */
+    .fade-up{opacity:0;transform:translateY(10px);animation:fadeUp 700ms forwards;}
+    @keyframes fadeUp{to{opacity:1;transform:none}}
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero,.two-col{grid-template-columns:1fr}
+      .features{grid-template-columns:repeat(2,1fr)}
+      .logo-blob{width:56px;height:56px}
+    }
+    @media (max-width:520px){
+      .features{grid-template-columns:1fr}
+      .nav{display:none}
+      .title{font-size:18px}
+      .logo-blob{width:48px;height:48px}
+    }
+
+    /* small, playful floating animation for cards */
+    .floaty{animation:floaty 6s ease-in-out infinite}
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <header>
+    <div class="nav-wrap">
+      <div class="brand">
+        <div class="logo-blob" aria-hidden>
+          <!-- replace with your Logo.png file inside the folder to keep brand -->
+          <img src="Logo.png" alt="Brightnest logo" onerror="this.style.display='none'" />
+        </div>
+        <div>
+          <div class="title">Brightnest Daycare</div>
+          <div style="font-size:12px;color:rgba(230,238,249,0.6);font-weight:600">Maple Valley, WA • Family-Focused Care</div>
+        </div>
+      </div>
+
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#programs">Programs</a>
+        <a href="#enroll">Enroll</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero card fade-up">
+      <div>
+        <h1 class="neon">Nurture curiosity. Brighten futures.</h1>
+        <p>Brightnest Daycare blends caring staff, creative play, and a safe environment so each child can grow — emotionally, socially, and academically.</p>
+        <div class="cta-row">
+          <button class="btn" onclick="document.getElementById('enroll-form').scrollIntoView({behavior:'smooth'})">Enroll Now</button>
+          <button class="ghost" onclick="window.open('https://shorturl.at/k9Efn','_blank')">View Map</button>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+          <div class="feature" style="min-width:140px;flex:1"> 
+            <h3 style="margin-bottom:6px">Safe & Nurturing</h3>
+            <p style="font-size:13px">Licensed staff, secure facility</p>
+          </div>
+          <div class="feature" style="min-width:140px;flex:1"> 
+            <h3 style="margin-bottom:6px">Play-Based Learning</h3>
+            <p style="font-size:13px">Storytime, arts, and outdoor play</p>
+          </div>
+          <div class="feature" style="min-width:140px;flex:1"> 
+            <h3 style="margin-bottom:6px">Flexible Hours</h3>
+            <p style="font-size:13px">Convenient schedules for families</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel floaty" aria-hidden>
+        <picture>
+          <img class="image" src="Hilgers-daycare-01.webp" alt="children at daycare" onerror="this.src='https://via.placeholder.com/420x260?text=Brightnest+Daycare'">
+        </picture>
+        <div class="floating-badge">Open spots • Call 253-951-2437</div>
+      </aside>
+    </section>
+
+    <section id="about" class="card fade-up" style="margin-bottom:20px">
+      <h2 style="margin-top:0;color:var(--accent)">About Brightnest</h2>
+      <p style="max-width:850px">At Brightnest Daycare we believe every child deserves a safe, loving, and enriching environment to learn and grow. We provide structured activities that foster independence, early literacy, social skills, and creative thinking.</p>
+    </section>
+
+    <section class="features fade-up" aria-label="Key benefits">
+      <div class="feature card">
+        <h3>Experienced Staff</h3>
+        <p>Qualified caregivers who love children and prioritize well-being.</p>
+      </div>
+      <div class="feature card">
+        <h3>Healthy Meals</h3>
+        <p>Nutritious snacks and meals with allergy-aware options.</p>
+      </div>
+      <div class="feature card">
+        <h3>Hands-on Learning</h3>
+        <p>Science, music, and arts activities that build curiosity.</p>
+      </div>
+    </section>
+
+    <section id="programs" class="card two-col fade-up">
+      <div class="programs">
+        <h2 style="margin-top:0;color:var(--accent)">Our Programs</h2>
+        <ul>
+          <li>Storytime & Early Literacy</li>
+          <li>Creative Arts & Music</li>
+          <li>Outdoor Play & Social Skills</li>
+          <li>Hands-on Science & Exploration</li>
+        </ul>
+
+        <h3 style="margin-top:20px;color:var(--neon)">Why Daycare Matters</h3>
+        <p style="max-width:700px">Daycare supports early development through socialization, structured activities, and routines that prepare children emotionally and academically for school.</p>
+      </div>
+
+      <aside class="card" style="display:flex;flex-direction:column;gap:12px">
+        <h3 style="margin:0">Quick Contact</h3>
+        <div class="contact" style="font-size:14px">📍 Maple Valley, WA 98038</div>
+        <div style="font-weight:700">📧 <a href="mailto:brightnestdaycarellc@gmail.com" style="color:var(--accent);text-decoration:none">brightnestdaycarellc@gmail.com</a></div>
+        <div style="font-weight:800;color:var(--accent);font-size:18px">📞 <a href="tel:+12539512437" style="color:var(--accent);text-decoration:none">253-951-2437</a></div>
+
+        <div style="margin-top:auto">
+          <small style="color:rgba(230,238,249,0.55)">Openings and hours vary. Call to confirm availability.</small>
+        </div>
+      </aside>
+    </section>
+
+    <section id="enroll" class="card fade-up" style="margin-bottom:20px">
+      <h2 style="margin-top:0;color:var(--accent)">Enroll Now</h2>
+      <div class="two-col" style="grid-template-columns:1fr 360px">
+        <div>
+          <p style="margin-top:0">Complete the form and we'll contact you to confirm enrollment and next steps.</p>
+          <form id="enroll-form" class="enroll" action="https://formspree.io/f/mvgqlkav" method="POST">
+            <input name="parent_name" placeholder="Parent's Name" required autocomplete="name">
+            <input name="child_name" placeholder="Child's Name" required>
+            <input type="email" name="email" placeholder="Email Address" required autocomplete="email">
+            <input type="tel" name="phone" placeholder="Phone Number" required autocomplete="tel">
+            <textarea name="message" rows="4" placeholder="Additional Information (allergies, schedule, etc.)"></textarea>
+            <button class="btn" type="submit">Submit Enrollment</button>
+          </form>
+        </div>
+
+        <aside class="card" style="background:linear-gradient(180deg,rgba(124,75,162,0.06),transparent)">
+          <h3 style="margin-top:0;color:var(--accent)">Rates & Hours</h3>
+          <p style="margin:0 0 10px 0">Flexible hours and affordable rates. Call or email for the latest schedule and pricing.</p>
+          <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
+            <li style="background:var(--glass-2);padding:10px;border-radius:8px">Morning Care • 7:30am — 12:00pm</li>
+            <li style="background:var(--glass-2);padding:10px;border-radius:8px">Full Day • 7:30am — 5:30pm</li>
+            <li style="background:var(--glass-2);padding:10px;border-radius:8px">Before/After • Custom scheduling available</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>&copy; <strong>Brightnest Daycare</strong> 2025</div>
+      <div style="text-align:right">
+        <div style="font-weight:700">📞 253-951-2437</div>
+        <div style="font-size:13px;color:rgba(230,238,249,0.7)"><a href="mailto:brightnestdaycarellc@gmail.com" style="color:inherit;text-decoration:underline">brightnestdaycarellc@gmail.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // -----------------------------
+    // Simple particle background (canvas)
+    // -----------------------------
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = innerWidth;
+    let h = canvas.height = innerHeight;
+    const particleCount = Math.max(24, Math.floor((w*h)/70000));
+    const particles = [];
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+
+    function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+    addEventListener('resize',resize);
+
+    class P{constructor(){this.x=rand(0,w);this.y=rand(0,h);this.r=rand(0.6,2.6);this.vx=rand(-0.15,0.15);this.vy=rand(-0.05,0.05);this.alpha=rand(0.06,0.25)}
+      move(){this.x+=this.vx;this.y+=this.vy; if(this.x< -10) this.x=w+10; if(this.x> w+10) this.x=-10; if(this.y< -10) this.y=h+10; if(this.y> h+10) this.y=-10}
+      draw(){ctx.beginPath();ctx.globalAlpha=this.alpha;ctx.fillStyle='#7cf1ff';ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();ctx.closePath();}
+    }
+
+    for(let i=0;i<particleCount;i++)particles.push(new P());
+    function loop(){ctx.clearRect(0,0,w,h);for(let p of particles){p.move();p.draw();}
+      // connect nearby
+      for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+          const a=particles[i], b=particles[j];
+          const dx=a.x-b.x; const dy=a.y-b.y; const d=dx*dx+dy*dy;
+          if(d<9000){ctx.beginPath();ctx.globalAlpha=0.03;ctx.strokeStyle='#7cf1ff';ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.closePath()}
+        }
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    // tiny interaction: scroll reveal
+    const observers = document.querySelectorAll('.fade-up');
+    const io = new IntersectionObserver((entries)=>{entries.forEach((e)=>{if(e.isIntersecting){e.target.style.animationDelay = (Math.random()*220)+'ms'; e.target.classList.add('visible'); e.target.style.opacity=1; e.target.style.transform='none';}}),{threshold:0.08});
+    observers.forEach(el=>io.observe(el));
+
+    // graceful fallback when form submitted: show a thank you overlay
+    const form = document.querySelector('form.enroll');
+    if(form){form.addEventListener('submit', (ev)=>{
+      // Let Formspree handle the submit; show a quick overlay
+      const overlay = document.createElement('div');
+      overlay.style.position='fixed';overlay.style.inset=0;overlay.style.display='flex';overlay.style.alignItems='center';overlay.style.justifyContent='center';overlay.style.background='rgba(2,6,23,0.6)';overlay.style.zIndex=9999;overlay.innerHTML='<div style="background:linear-gradient(90deg,#0b1220,#111827);padding:26px;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.6);text-align:center;color:white;max-width:360px">Submitting…<div style="height:12px"></div><div style="font-size:13px;color:rgba(230,238,249,0.7)">You will be redirected if the submission succeeds.</div></div>';
+      document.body.appendChild(overlay);
+      setTimeout(()=>{ /* If Formspree redirects, that will happen. */ },1200);
+    })}
+
+  </script>
+</body>
+</html>
